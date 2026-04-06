@@ -74,12 +74,18 @@ class BlogParser(HTMLParser):
             self._capture = None
 
 
-def parse_date(date_str):
-    # "2026/4/05" -> datetime
+def parse_date(date_str, now):
+    # "2026/4/05 12:34" or "2026/4/05" -> datetime
     try:
-        return datetime.strptime(date_str, "%Y/%m/%d").replace(tzinfo=JST)
-    except Exception:
-        return datetime.now(JST)
+        return datetime.strptime(date_str.strip(), "%Y/%m/%d %H:%M").replace(tzinfo=JST)
+    except ValueError:
+        pass
+    try:
+        dt = datetime.strptime(date_str.strip(), "%Y/%m/%d")
+        return dt.replace(hour=now.hour, minute=now.minute, second=now.second, tzinfo=JST)
+    except ValueError:
+        pass
+    return now
 
 
 def build_rss(entries):
@@ -90,10 +96,10 @@ def build_rss(entries):
     ET.SubElement(channel, "link").text = BLOG_LIST_URL
     ET.SubElement(channel, "description").text = "櫻坂46公式ブログ"
     ET.SubElement(channel, "language").text = "ja"
-    ET.SubElement(channel, "lastBuildDate").text = datetime.now(JST).strftime(
+    now = datetime.now(JST)
+    ET.SubElement(channel, "lastBuildDate").text = now.strftime(
         "%a, %d %b %Y %H:%M:%S %z"
     )
-
     for e in entries:
         item = ET.SubElement(channel, "item")
         title = f"{e.get('name', '')} - {e.get('title', '')}"
@@ -101,7 +107,7 @@ def build_rss(entries):
         ET.SubElement(item, "link").text = e["url"]
         ET.SubElement(item, "guid", isPermaLink="true").text = e["url"]
         ET.SubElement(item, "description").text = e.get("lead", "")
-        pub_date = parse_date(e.get("date", ""))
+        pub_date = parse_date(e.get("date", ""), now)
         ET.SubElement(item, "pubDate").text = pub_date.strftime(
             "%a, %d %b %Y %H:%M:%S %z"
         )
