@@ -2,7 +2,7 @@
 
 ## 概要
 
-櫻坂46公式ブログ（https://sakurazaka46.com/s/s46/diary/blog/list?ima=0000）をスクレイピングして RSS フィードを生成し、GitHub Pages（raw.githubusercontent.com）経由で配信するリポジトリ。
+櫻坂46公式ブログ（https://sakurazaka46.com/s/s46/diary/blog/list?ima=0000）をスクレイピングして RSS フィードを生成し、raw.githubusercontent.com 経由で配信するリポジトリ。
 
 ## ファイル構成
 
@@ -27,7 +27,7 @@
 ## RSS 購読 URL
 
 ```
-https://raw.githubusercontent.com/hiroqli/rss-builder-for-Sakurazaka-blogs/main/feed.xml
+https://raw.githubusercontent.com/nutsfall/rss-builder-for-Sakurazaka-blogs/main/feed.xml
 ```
 
 ## GitHub Actions フロー
