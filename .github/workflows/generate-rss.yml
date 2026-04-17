@@ -2,7 +2,7 @@ name: Generate Sakurazaka46 RSS
 
 on:
   schedule:
-    - cron: "0 * * * *"  # 60分おき
+    - cron: "0,30 * * * *"  # 30分おき
   workflow_dispatch:  # 手動実行も可能
 
 jobs:
